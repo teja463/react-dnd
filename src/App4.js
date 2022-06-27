@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { AgGridReact } from "ag-grid-react";
-import MyFilter from "./MyFilter";
+import MyFilter from "./MyDefinedBucketFilter";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 // import 'ag-grid-enterprise';
