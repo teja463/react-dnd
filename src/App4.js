@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { AgGridReact } from "ag-grid-react";
 import MyFilter from "./MyDefinedBucketFilter";
+import MyMultiSelectFilter from './MyMultiSelectFilter';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 // import 'ag-grid-enterprise';
@@ -31,10 +32,9 @@ export default function App() {
     { field: "country" },
     {
       field: "year",
-      filter: MyFilter,
+      filter: MyMultiSelectFilter,
       filterParams: {
-        title: "Year Filter",
-        filterValues: [2004, 2008, 2012]
+        title: "Year Filter"
       },
       floatingFilter: true
     },
@@ -58,7 +58,7 @@ export default function App() {
   }, []);
 
   function addRow(){
-    const data = {"athlete":"Teja","age":99,"country":"United States","year":2008,"date":"24/08/2008","sport":"Swimming","gold":8,"silver":0,"bronze":0,"total":8};
+    const data = {"athlete":"Teja","age":99,"country":"India","year":1989,"date":"24/08/2008","sport":"Swimming","gold":8,"silver":0,"bronze":0,"total":8};
     setRowData([...rowData, data]);
   }
   return (
