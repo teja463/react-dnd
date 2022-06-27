@@ -7,10 +7,8 @@ import React, {
 } from "react";
 import { AgGridReact } from "ag-grid-react";
 import MyFilter from "./MyDefinedBucketFilter";
-import MyMultiSelectFilter from './MyMultiSelectFilter';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-// import 'ag-grid-enterprise';
 
 export default function App() {
   const [rowData, setRowData] = useState();
@@ -32,9 +30,10 @@ export default function App() {
     { field: "country" },
     {
       field: "year",
-      filter: MyMultiSelectFilter,
+      filter: MyFilter,
       filterParams: {
-        title: "Year Filter"
+        title: "Year Filter",
+        filterValues: [2004, 2012]
       },
       floatingFilter: true
     },
