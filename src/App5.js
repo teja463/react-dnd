@@ -4,11 +4,68 @@ import React, {
   useMemo,
   useRef,
   useCallback,
+  forwardRef,
+  useImperativeHandle,
 } from "react";
 import { AgGridReact } from "ag-grid-react";
-import MyFilter from "./MyDefinedBucketFilter";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import MyFloatingFilter from "./MyFloatingFilter";
+
+const MyFilter = forwardRef((props, ref) => {
+  const [filterState, setFilterState] = useState("off");
+  useImperativeHandle(ref, () => {
+    return {
+      isFilterActive() {
+        return filterState !== "off";
+      },
+      doesFilterPass(params) {
+        
+        const field = props.colDef.field;
+        return params.data[field] == filterState;
+      },
+      getModel() {
+        if(filterState === 'off'){
+            return undefined;
+        }else{
+            return {
+                state: filterState
+            }
+        }
+      },
+      setModel(model) {
+          if(model==null){
+              setFilterState('off')
+          }else{
+              setFilterState(model.state);
+          }
+      },
+      onNewRowsLoaded(){
+        console.log('new Rows Loaded');
+      },
+      setFilter(val){
+        setFilterState(val);
+      }
+    };
+  });
+
+  useEffect(() => {
+    props.filterChangedCallback();
+  }, [filterState]);
+
+  return (
+    <>
+      <div>{props.title}</div>
+      <div>
+        <div><button onClick={() => setFilterState("off")}>Filter Off</button></div>
+        {props.filterValues.map((val) => (
+          <div><button onClick={() => setFilterState(val)}>{val}</button></div>
+        ))}
+      </div>
+    </>
+  );
+});
+
 
 export default function App() {
   const [rowData, setRowData] = useState();
@@ -19,24 +76,25 @@ export default function App() {
       field: "athlete",
     },
     {
-      field: "age",
-      filter: MyFilter,
-      filterParams: {
-        title: "Age Filter",
-        filterValues: [17, 18, 19]
-      },
-      floatingFilter: true
-    },
-    { field: "country" },
-    {
       field: "year",
       filter: MyFilter,
       filterParams: {
         title: "Year Filter",
         filterValues: [2004, 2012]
       },
-      floatingFilter: true
+      floatingFilter: true,
+      floatingFilterComponent: MyFloatingFilter
     },
+    {
+      field: "age",
+      filter: MyFilter,
+      filterParams: {
+        title: "Age Filter",
+        filterValues: [17, 18, 19]
+      }
+    },
+    { field: "country" },
+    
     { field: "date" },
   ]);
 
